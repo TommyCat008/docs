@@ -140,6 +140,9 @@ https://blog.csdn.net/lhtzbj12/article/details/79188447
 npm install file-loader --save-dev
 ```
 
+file-loader的作用是什么？
+
+
 ### 六、分离第三方库以及manifest
 
 这个需要创建一个optimization，然后在内部创建引入如下的方法。

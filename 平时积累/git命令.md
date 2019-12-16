@@ -234,6 +234,12 @@ fix: 本次提交主要是修复问题
 
 refactor: 重构某些代码
 
-chore: 零碎的内容提交
+chore: 构建过程或辅助工具的变动
+
+docs：文档（documentation）
+
+style： 格式（不影响代码运行的变动）
+
+test：增加测试
 ```
 

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>安卓充电动效</title>
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            background: #fff;
+            overflow: hidden;
+        }
+        
+        .g-number {
+            position: absolute;
+            width: 300px;
+            top: 27%;
+            text-align: center;
+            font-size: 32px;
+            z-index: 10;
+            color: #fff;
+        }
+        
+        .g-container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            margin: auto;
+        }
+        
+        .g-contrast {
+            -webkit-filter: contrast(15) hue-rotate(0);
+            filter: contrast(15) hue-rotate(0);
+            width: 300px;
+            height: 400px;
+            background-color: #000;
+            overflow: hidden;
+            -webkit-animation: hueRotate 10s infinite linear;
+            animation: hueRotate 10s infinite linear;
+        }
+        
+        .g-circle {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            box-sizing: border-box;
+            -webkit-filter: blur(8px);
+            filter: blur(8px);
+        }
+        
+        .g-circle::after {
+            content: "";
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%) rotate(0);
+            transform: translate(-50%, -50%) rotate(0);
+            width: 200px;
+            height: 200px;
+            background-color: #00ff6f;
+            border-radius: 42% 38% 62% 49% / 45%;
+            -webkit-animation: rotate 10s infinite linear;
+            animation: rotate 10s infinite linear;
+        }
+        
+        .g-circle::before {
+            content: "";
+            position: absolute;
+            width: 176px;
+            height: 176px;
+            top: 40%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background-color: #000;
+            z-index: 10;
+        }
+        
+        .g-bubbles {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 100px;
+            height: 40px;
+            -webkit-transform: translate(-50%, 0);
+            transform: translate(-50%, 0);
+            border-radius: 100px 100px 0 0;
+            background-color: #00ff6f;
+            -webkit-filter: blur(5px);
+            filter: blur(5px);
+        }
+        
+        li {
+            position: absolute;
+            border-radius: 50%;
+            background: #00ff6f;
+        }
+        
+        li:nth-child(0) {
+            left: 68px;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 28px;
+            height: 28px;
+            -webkit-animation: moveToTop 9s ease-in-out -3.334s infinite;
+            animation: moveToTop 9s ease-in-out -3.334s infinite;
+        }
+        
+        li:nth-child(1) {
+            left: 43px;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 25px;
+            height: 25px;
+            -webkit-animation: moveToTop 4s ease-in-out -4.2s infinite;
+            animation: moveToTop 4s ease-in-out -4.2s infinite;
+        }
+        
+        li:nth-child(2) {
+            left: 47px;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 27px;
+            height: 27px;
+            -webkit-animation: moveToTop 9s ease-in-out -2.163s infinite;
+            animation: moveToTop 9s ease-in-out -2.163s infinite;
+        }
+        
+        li:nth-child(3) {
+            left: 29px;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            -webkit-animation: moveToTop 4s ease-in-out -3.746s infinite;
+            animation: moveToTop 4s ease-in-out -3.746s infinite;
+        }
+        
+        li:nth-child(4) {
+            left: 33px;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 23px;
+            height: 23px;
+            -webkit-animation: moveToTop 4s ease-in-out -2.512s infinite;
+            animation: moveToTop 4s ease-in-out -2.512s infinite;
+        }
+        
+        li:nth-child(5) {
+            left: 36px;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 29px;
+            height: 29px;
+            -webkit-animation: moveToTop 7s ease-in-out -1.724s infinite;
+            animation: moveToTop 7s ease-in-out -1.724s infinite;
+        }
+        
+        li:nth-child(6) {
+            left: 50px;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            -webkit-animation: moveToTop 9s ease-in-out -2.277s infinite;
+            animation: moveToTop 9s ease-in-out -2.277s infinite;
+        }
+        
+        li:nth-child(7) {
+            left: 50px;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 21px;
+            height: 21px;
+            -webkit-animation: moveToTop 9s ease-in-out -2.397s infinite;
+            animation: moveToTop 9s ease-in-out -2.397s infinite;
+        }
+        
+        li:nth-child(8) {
+            left: 33px;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 18px;
+            height: 18px;
+            -webkit-animation: moveToTop 6s ease-in-out -1.385s infinite;
+            animation: moveToTop 6s ease-in-out -1.385s infinite;
+        }
+        
+        li:nth-child(9) {
+            left: 20px;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 27px;
+            height: 27px;
+            -webkit-animation: moveToTop 6s ease-in-out -0.302s infinite;
+            animation: moveToTop 6s ease-in-out -0.302s infinite;
+        }
+        
+        li:nth-child(10) {
+            left: 32px;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 28px;
+            height: 28px;
+            -webkit-animation: moveToTop 9s ease-in-out -0.763s infinite;
+            animation: moveToTop 9s ease-in-out -0.763s infinite;
+        }
+        
+        li:nth-child(11) {
+            left: 22px;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            -webkit-animation: moveToTop 6s ease-in-out -2.455s infinite;
+            animation: moveToTop 6s ease-in-out -2.455s infinite;
+        }
+        
+        li:nth-child(12) {
+            left: 63px;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 24px;
+            height: 24px;
+            -webkit-animation: moveToTop 7s ease-in-out -4.035s infinite;
+            animation: moveToTop 7s ease-in-out -4.035s infinite;
+        }
+        
+        li:nth-child(13) {
+            left: 39px;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 27px;
+            height: 27px;
+            -webkit-animation: moveToTop 9s ease-in-out -1.437s infinite;
+            animation: moveToTop 9s ease-in-out -1.437s infinite;
+        }
+        
+        li:nth-child(14) {
+            left: 30px;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            -webkit-animation: moveToTop 7s ease-in-out -0.448s infinite;
+            animation: moveToTop 7s ease-in-out -0.448s infinite;
+        }
+        
+        li:nth-child(15) {
+            left: 67px;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 18px;
+            height: 18px;
+            -webkit-animation: moveToTop 7s ease-in-out -3.212s infinite;
+            animation: moveToTop 7s ease-in-out -3.212s infinite;
+        }
+        
+        @-webkit-keyframes rotate {
+            50% {
+                border-radius: 45% / 42% 38% 58% 49%;
+            }
+            100% {
+                -webkit-transform: translate(-50%, -50%) rotate(720deg);
+                transform: translate(-50%, -50%) rotate(720deg);
+            }
+        }
+        
+        @keyframes rotate {
+            50% {
+                border-radius: 45% / 42% 38% 58% 49%;
+            }
+            100% {
+                -webkit-transform: translate(-50%, -50%) rotate(720deg);
+                transform: translate(-50%, -50%) rotate(720deg);
+            }
+        }
+        
+        @-webkit-keyframes moveToTop {
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: .1;
+                -webkit-transform: translate(-50%, -180px);
+                transform: translate(-50%, -180px);
+            }
+        }
+        
+        @keyframes moveToTop {
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: .1;
+                -webkit-transform: translate(-50%, -180px);
+                transform: translate(-50%, -180px);
+            }
+        }
+        
+        @-webkit-keyframes hueRotate {
+            100% {
+                -webkit-filter: contrast(15) hue-rotate(360deg);
+                filter: contrast(15) hue-rotate(360deg);
+            }
+        }
+        
+        @keyframes hueRotate {
+            100% {
+                -webkit-filter: contrast(15) hue-rotate(360deg);
+                filter: contrast(15) hue-rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="g-container">
+        <div class="g-number">98.7%</div>
+        <div class="g-contrast">
+            <div class="g-circle"></div>
+            <ul class="g-bubbles">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,13 +1,13 @@
 JavaScript的超集，基于ES6.
 #### 1、安装全局的TypeScript
 
-```
+```powershell
 npm i -g typescript
 ```
 
 #### 2、使用命令编译.ts文件为.js文件
 
-```
+```powershell
 tsc XXX.ts
 ```
 
@@ -15,7 +15,7 @@ tsc XXX.ts
 
 TypeScript里的类型注解是一种轻量级的为函数或变量添加约束的方式。
 
-```
+```javascript
 // 给函数的参数添加数据类型的注解
 function greeter(person: string) {
     return "Hello, " + person;
@@ -28,8 +28,8 @@ document.body.innerHTML = greeter(user);
 
 参数的传递规则，必选参数、可选参数以及默认参数。可选参数要放在必选参数的后面以及默认参数的前面。
 
-```
-<!--三种传参方式的介绍-->
+```javascript
+// 三种传参方式的介绍
 functiontest(a:string, b?:string, c:string="hhh") {
 
     console.log(a);
@@ -44,12 +44,12 @@ functiontest(a:string, b?:string, c:string="hhh") {
 可以使用的类型
 number string boolean any(可以是任何类型的数据) void(声明方法，说明方法不需要返回值)
 
-#### 接口 interface 
+#### 4、接口 interface 
 
 这里我们使用接口来描述一个拥有firstName和lastName字段的对象。 在TypeScript里，只在两个类型内部的结构兼容那么这两个类型就是兼容的。 这就允许我们在实现接口时候只要保证包含了接口要求的结构就可以，而不必明确地使用 implements语句。
 
-```
-<!--声明属性-->
+```javascript
+// 声明属性
 interface Person {
     firstName: string;
     lastName: string;
@@ -67,7 +67,7 @@ greeter(user);
 
 声明函数，必须要==实现implements==接口的关键字
 
-```
+```javascript
 interface Animal {
     eat();
 }
@@ -85,10 +85,10 @@ class Monkey implements Animal {
 }
 ```
 
-#### 类 class 自定义类型
+#### 5、类 class 自定义类型
 
 
-```
+```javascript
 class Student {
     fullName: string;
     constructor(public firstName, public middleInitial, public lastName) {
@@ -118,7 +118,7 @@ greeter(user);
 注意在构造函数里面填写参数的时候，如果构造函数里面没有定义this.name=name并且不填写public关键字的话，类里面的方法是无法访问name的。需要解决的方法就是定义一个public，或者在class类中定义name并在constructor中进行this.name = name赋值操作;
 只能是一下两种方式：
 
-```
+```javascript
 class Shape {
 
     name: string;
@@ -128,7 +128,7 @@ class Shape {
     };
 }
 ```
-```
+```javascript
 class Shape {
 
     constructor(public name: string) {
@@ -136,11 +136,11 @@ class Shape {
     };
 }
 ```
-#### 继承 extends
+#### 6、继承 extends
 
 继承一个已存在的类并创建一个派生类，继承使用关键字 extends
 
-```
+```javascript
 class Shape {
 
     area: number;
@@ -185,11 +185,11 @@ console.log( cube.superShout() );
 - 子类的构造函数constructor必须要调用父类的构造函数
 
 
-#### 泛型 generic
+#### 7、泛型 generic
 
 参数化的类型，一般是用来限制集合的内容，指定存放的元素类型。以<>来表示
 
-```
+```javascript
 class Greeter<T> {
     greeting: T;
     constructor(message: T) {
@@ -210,10 +210,10 @@ button.onclick = function() {
 ```
 注意定义传参的类型是class的时候，其子类也是可以被接受的。
 
-#### 模板字符串
+#### 8、模板字符串
 
 可以使用以下的方式来拆分模板内的传参，template会是一个数组，而name和age会是在模板中的参数。
-```
+```javascript
 function test(template, name, age) {
     console.log(template);
     console.log(name);

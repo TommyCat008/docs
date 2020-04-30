@@ -2,7 +2,7 @@
 
 1、在项目的根目录运行tsc --init 来生成一个ts的配置文件tsconfig.json，生成之后进入配置文件，需要修改其中配置项outDir的值，你可以指定其编译之后的路径。
 
-2、点击vscode的菜单 任务(Terminal)-》运行任务 点击tsc：监视tsconfig.json文件然后就可以自动生成代码
+2、点击vscode的菜单 任务(Terminal)->运行任务->点击tsc：监视tsconfig.json文件然后就可以自动生成代码
 
 
 #### 二、数据类型
@@ -10,7 +10,6 @@
 在ts中，为了保证编码的规范性和维护性，ts新增的类型校验。
 
 目前存在的数据类型如下
-
 - 布尔类型
 - 数字类型
 - 字符串类型
@@ -164,7 +163,7 @@ function css(config, value) {
     return {}
 }
 
-// 在typescript中的重载
+// 在typescript中的重载功能
 function getInfo(name:string):string;
 function getInfo(age:number):string;
 function getInfo(str: any):any {
@@ -178,3 +177,349 @@ function getInfo(str: any):any {
 // getInfo(true) // 错误
 
 ```
+
+#### 四、es5中的类
+ 
+```javascript
+// 创造一个构造函数以及在其原型链上创建方法
+function Person(name, sex) {
+    this.name = name,
+    this.sex = sex,
+    this.run = function() { // 实例方法
+        console.log(this.name + '在运动');
+    }
+    this.work = function() { // 实例方法
+        console.log(this.name + '在内部工作');
+    }
+}
+
+// 注意：原型链上面的属性会被多个实例共享，构造函数不会共享
+Person.prototype.sex = '女';
+Person.prototype.work = function() {
+    console.log(this.name + '在工作');
+}
+Person.prototype.play = function() {
+    console.log(this.name + '在游玩');
+}
+
+// 静态方法的名字可以和实例方法的名字一样，实例方法需要创建实例才能调用，静态方法可以直接调用
+Person.getInfo = function() { 
+    console.log('静态方法')
+}
+
+// 创建实例
+var p = new Person('张三', '男');
+console.log(p.sex);
+console.log(p.work()) // 在查找方法的时候，首先会查找构造函数内部的方法，其次再查找原型链上的方法。
+
+Person.getInfo(); // 调用静态方法
+
+// 继承类（es5继承的方式分为原型链、对象冒充的方式）
+
+// 1、对象冒充
+function Son() {
+    Person.call(this); // 对象冒充的方式实现继承，但是无法继承原型链里面的属性和方法
+}
+
+var s = new Son();
+s.run();  // 可以执行
+s.play(); // 执行失败
+
+// 2、原型链继承，既可以继承构造函数里面的属性和方法，也可以继承原型链上面的属性和方法。
+function Son() {
+
+}
+Son.prototype = new Person();
+
+var s = new Son();
+s.run(); // 可以执行 
+s.play(); // 可以执行  
+// 原型链继承的方式，在实例化原型的时候是无法给父类传递参数的。
+var s = new Son(name, age); // 这种实例化方式父类是拿不到值的
+
+
+// 3、原型链+对象冒充组合方式来继承
+function Son(name, sex) {
+    Person.call(this, name, sex);
+}
+Son.prototype = new Person();
+
+```
+
+#### 五、typescript中的类
+
+```typescript
+class Person {
+    name:string; // 定义属性，省略了public关键字
+
+    constructor(name:string) { // 构造函数，在实例化的时候触发的方法
+        this.name = name;
+    }
+
+    run():string {
+        return `${this.name}在运动`
+    }
+
+    getName():string {
+        return this.name;
+    }
+
+    setName(name:string):void {
+        this.name = name;
+    }
+}
+var p = new Person('张三');
+p.run();
+
+// ts继承的实现 extends, super
+class Son extends Person {
+    constructor(name:string) {
+        super(name); // 调用父类的构造函数
+    }
+
+    run():string {
+        return `子类，${this.name}在运动`
+    }
+}
+
+var s = new Son('李四');
+
+// 父类的方法和子类的方法一致
+s.run(); // 如果父子都有同一个方法，则会优先执行子类的方法。
+
+```
+
+#### 六、类里面的修饰符
+```typescript
+// 定义属性的时候提供三种修饰符 
+public // 公有，类里面、子类、类外面都可以访问
+protected // 在类里面、子类里面可以访问，类外面不可以访问
+private // 类里面可以访问，子类和类外部不可访问
+// 类外部是指不可被创建的实例直接点出 例如 p.name
+
+class Person {
+    name:string; // 定义属性，省略了public关键字
+    protected age:string;
+    private tall:string;
+
+    constructor(name:string) { // 构造函数，在实例化的时候触发的方法
+        this.name = name;
+        this.age = '28';
+        this.tall = 178;
+    }
+
+    run():string {
+        return `${this.name}在运动`
+    }
+
+    getName():string {
+        return this.name;
+    }
+
+    setName(name:string):void {
+        this.name = name;
+    }
+}
+
+class Son extends Person {
+    constructor(name:string) {
+        super(name); // 调用父类的构造函数
+    }
+
+    run():string {
+        return `子类，${this.name}在运动`
+    }
+}
+
+var s = new Son('李四');
+console.log(s.name); // public是可以完全被访问到的
+// console.log(s.age); // 受保护类型不可以直接被外部使用，
+// console.log(s.tall); // 私有类型智能在父类内部使用
+```
+
+#### 七、静态属性、静态方法、抽象类、多态
+Q: 为什么会出现静态方法呢？
+以jQuery为例子进行讲解
+```javascript
+// jQuery中的api有 $('#box').css('color', 'red') 和 $.get('url', function() {})这两种
+function $(element) {
+    return new Base('element');
+}
+
+$.get(url, callback) { // get方法
+    ......
+}
+
+function Base(element) {
+    this.element = element;
+
+    this.css = function(attr, value) {
+        this.element.style.attr = value;
+    }
+}
+
+$('#box').css('color', 'red');
+
+$.get('url', function() {})
+```
+
+静态属性和静态方法
+```typescript
+class Person {
+    public name:string;
+    static age:string;
+    constructor(name:string) {
+        this.name = name;
+        this.age = 28;
+    }
+
+    run():string {
+        console.log(this.name + '在跑步')
+        return this.name + '在跑步';
+    }
+
+    work():string {
+        console.log(this.name + '在工作');
+        return `${this.name}在工作`;
+    }
+
+    // es6 静态方法无法直接调用类里面的属性，需要在类中定义静态属性，
+    static sleep():string {
+        return this.age + '在睡觉'; 
+    }
+}
+```
+多态：父类定义一个方法不去实现，让继承它的子类去实现，每个子类有不同的表现叫做多态
+```typescript
+class Animal {
+    name: string;
+    constructor(name: string) {
+        this.name = name;
+    }
+
+    eat() {
+        console.log('吃的方法')
+    }
+}
+
+class Dog extends Animal {
+    constructor(name: string) {
+        super(name);
+    }
+
+    eat() {
+        return this.name + '小狗吃肉';
+    }
+}
+
+class Cat extends Animal {
+    constructor(name:string) {
+        super(name);
+    }
+
+    eat() {
+        return this.name + '吃老鼠';
+    }
+}
+```
+
+抽象方法和抽象类：它是提供其他类继承的基类，不能直接被实例化。用abstract关键字定义的抽象类和抽象方法，抽象类中的抽象方法不包含具体实现并且必须在派生类中实现。
+```typescript
+// abstract抽象方法只能放在抽象类中
+// Animal这个类要求它的子类必须包含eat方法
+// 抽象类和抽象方法是定义标准
+abstract class Animal {
+    name: string;
+    constructor(name: string) {
+        this.name = name;
+    }
+    abstract eat(): any;
+}
+
+// var a = new Animal(); // 错误的写法，抽象类不可被实例化
+
+class Dog extends Animal {
+    constructor(name: string) {
+        super(name)
+    }
+
+    eat(): string { // 子类必须实现父类的eat方法
+        return this.name + '吃狗粮';
+    }
+}
+
+var d = new Dog('dog');
+
+console.log(d.eat())
+
+```
+
+#### 八、接口（定义标准）
+接口是一种规范的定义，它定义了行为和动作规范，在程序设计里面，接口起到一种限制和规范的作用。接口定义了某一批类所需遵守的规范，接口不关心这些类的内部状态数据，也不关心这些类里方法的实现细节，它只规定这批类里必须提供某些方法，提供这些方法的类就可以满足实际需要。ts中的接口类似于Java，同时还增加了更灵活的接口类型，包括属性、函数、可索引和类等。
+
+- 属性类接口
+- 函数类型接口
+- 可索引接口
+- 类类型接口
+- 接口扩展
+
+1、属性接口，json的约束
+```typescript
+// 自定义方法传入参数，对json进行约束
+function printLabel(LabelInfo: {label:string}):void {
+    console.log('有点东西')
+}
+
+
+printLabel({label: '哈哈'});
+
+// printLabel({label: '哈哈', name: '张三'}) // 错
+
+// 接口方式
+interface Name {
+    age?:number;
+    firstName:string;
+    lastName:string;
+}
+
+function printName(name: Name):void {
+    console.log(name.firstName + ' . ' + name.lastName);
+}
+
+printName({
+    firstName: '张',
+    lastName: '三'
+})
+```
+
+ajax的封装
+```typescript
+interface Config {
+    type: string;
+    url: string;
+    data?: string;
+    dataType: string
+}
+
+function ajax(config: Config) {
+    var xhr = new XMLHttpRequest();
+
+    xhr.open(config.tyope, config.url, 'true');
+
+    xhr.send(config.data);
+
+    xhr.onreadystatechange = function() {
+        
+        if (xhr.readyState == 4 && xhr.status == 200)
+            console.log('成功')
+    }
+}
+
+ajax({
+    type: 'get',
+    url: 'http://www.baidu.com',
+    dataType: 'json'
+})
+```
+
+2、函数类接口

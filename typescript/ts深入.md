@@ -389,7 +389,7 @@ class Person {
     }
 }
 ```
-多态：父类定义一个方法不去实现，让继承它的子类去实现，每个子类有不同的表现叫做多态
+多态：父类定义一个方法不去实现，让继承它的子类去实现，每个子类有不同的表现叫做多态。多态的意义是运行时代码区不同。
 ```typescript
 class Animal {
     name: string;
@@ -522,4 +522,95 @@ ajax({
 })
 ```
 
-2、函数类接口
+2、函数类接口，对方法传入的参数以及返回值进行约束。
+```typescript
+interface encrypt {
+    // 对传参进行约束，函数使用必须符合我的约束
+    (key: string, value: string): string; 
+}
+
+var md5: encrypt = function (key: string, value: string): string {
+    // 模拟md5
+    return key + value;
+}
+```
+
+3、可索引接口，数组或对象的约束。
+```typescript
+// 对数组的约束
+interface userArray {
+    // 意思是索引值应该是number，值是string类型
+    [index:number]:string
+}
+var arr:userArray = ['asd']
+
+// 对象约束
+interface userObj {
+    [index:string]:string;
+}
+
+var obj:userObj = {
+    name: 'zhangsan'
+}
+```
+
+4、类类型接口，对类的约束。
+
+```ts
+// 对于软件设计可以约束开发，必须按照接口的设计来实现类
+
+interface Animal {
+    name: string;
+    eat(str: string): void;
+}
+
+// Dog类实现接口，必须实现接口的内容
+class Dog implements Animal {
+    name: string
+    constructor(name:string) {
+        this.name = name;
+    }
+
+    eat() { // 实现类的方法，可以不传参数
+        console.log(this.name + '吃东西');
+    }
+}
+
+var dog = new Dog('小狗');
+
+dog.eat();
+```
+
+5、接口的扩展
+```ts
+interface Animal {
+    eat():void;
+}
+
+interface Person extends Animal {
+    work():void;
+}
+
+// Web 必须实现Person和Animal这两个接口
+class Web implements Person {
+    name:string;
+    constructor(name:string) {
+        this.name = name;
+    }
+
+    eat() {
+        console.log(this.name + '喜欢吃');
+    }
+
+    work() {
+        console.log(this.name + '在工作')
+    }
+}
+```
+
+#### 九、泛型
+在软件开发中，代码不禁要创建一支的定义良好的API，同时也要考虑可重用性。组件不禁能够支持当前的数据类型，同时也能支持未来的数据类型。这在创建大型系统是为你提供了十分灵活的功能。
+
+在像C#和Java这样的语言中，可以使用泛型来创建可重用的组件，一个组件可以支持多种类型的数据局。这样用户就可以以自己的数据类型来使用组件。
+
+通俗理解：泛型就是解决类、接口、方法的复用性、以及对不特定数据类型的支持。

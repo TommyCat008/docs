@@ -1,26 +1,23 @@
-interface Config {
-    type: string;
-    url: string;
-    data?: string;
-    dataType: string
+interface Animal {
+    eat(): void;
 }
 
-function ajax(config: Config) {
-    var xhr = new XMLHttpRequest();
+interface Person extends Animal {
+    work(): void;
+}
 
-    xhr.open(config.url, 'true');
+// Web 必须实现Person和Animal这两个接口
+class Web implements Person {
+    name: string;
+    constructor(name: string) {
+        this.name = name;
+    }
 
-    xhr.send(config.data);
+    eat() {
+        console.log(this.name + '喜欢吃');
+    }
 
-    xhr.onreadystatechange = function() {
-        
-        if (xhr.readyState == 4 && xhr.status == 200)
-            console.log('成功')
+    work() {
+        console.log(this.name + '在工作')
     }
 }
-
-ajax({
-    type: 'get',
-    url: 'http://www.baidu.com',
-    dataType: 'json'
-})

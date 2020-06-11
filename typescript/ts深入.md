@@ -333,8 +333,8 @@ class Son extends Person {
 
 var s = new Son('李四');
 console.log(s.name); // public是可以完全被访问到的
-// console.log(s.age); // 受保护类型不可以直接被外部使用，
-// console.log(s.tall); // 私有类型智能在父类内部使用
+console.log(s.age); // 受保护类型不可以直接被外部使用，
+console.log(s.tall); // 私有类型只能在父类内部使用
 ```
 
 #### 七、静态属性、静态方法、抽象类、多态
@@ -408,7 +408,7 @@ class Dog extends Animal {
     }
 
     eat() {
-        return this.name + '小狗吃肉';
+        return this.name + '吃肉';
     }
 }
 

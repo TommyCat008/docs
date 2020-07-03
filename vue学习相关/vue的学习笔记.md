@@ -1,3 +1,5 @@
+[TOC]
+
 #### 一、vue的概念及核心思想
 
 ##### 概念 
@@ -88,7 +90,7 @@ Vue.use(VueRouter)
 ##### 使用
 1、在HTML中使用路由
 
-```
+```html
 <div id="app">
   <h1>Hello App!</h1>
   <p>
@@ -106,7 +108,7 @@ Vue.use(VueRouter)
 
 2、在JavaScript中配置模板
 
-```
+```js
 // 0. 如果使用模块化机制编程，导入Vue和VueRouter，要调用 Vue.use(VueRouter)
 
 // 1. 定义（路由）组件。
@@ -139,7 +141,7 @@ const app = new Vue({
 ```
 3、在任何组件内通过 this.$router 访问路由器，也可以通过 this.$route 访问当前路由
 
-```
+```js
 // Home.vue
 export default {
   computed: {
@@ -163,7 +165,7 @@ export default {
 
 示例代码，根据点击不同的url会得到相应的url的参数
 
-```
+```html
 <div id="app">
   <p>
     <router-link to="/user/foo">/user/foo</router-link>
@@ -173,7 +175,7 @@ export default {
 </div>
 ```
 
-```
+```js
 const User = {
   template: '<div>User</div>'
 }
@@ -198,7 +200,7 @@ const router = new VueRouter({
 
 2、具体示例
 
-```
+```JavaScript
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 
@@ -212,7 +214,7 @@ const router = new VueRouter({
 </div>
 ```
 
-```
+```js
 const User = {
   template: `
     <div class="user">
@@ -252,9 +254,11 @@ const app = new Vue({ router }).$mount('#app')
 
 ##### 编程式导航
 1、除了使用 <router-link> 创建 a 标签来定义导航链接，我们还可以借助 router 的实例方法，通过编写代码来实现。
-```
+
+```js
 router.push(location, onComplete?, onAbort?)
 ```
+
 注意：在 Vue 实例内部，你可以通过 $router 访问路由实例。因此你可以调用 this.$router.push。
 
 2、当你点击 <router-link> 时，这个方法会在内部调用，所以说，点击 <router-link :to="..."> 等同于调用 router.push(...)。
@@ -263,7 +267,7 @@ router.push(location, onComplete?, onAbort?)
 ---|---
 <router-link :to="..."> | router.push(...)
 
-```
+```js
 // 字符串
 router.push('home')
 
@@ -279,7 +283,7 @@ router.push({ path: 'register', query: { plan: 'private' }})
 
 3、跟 router.push 很像，唯一的不同就是，它不会向 history 添加新记录，而是跟它的方法名一样 —— 替换掉当前的 history 记录。
 
-```
+```js
 router.replace(location, onComplete?, onAbort?)
 ```
 
@@ -291,7 +295,7 @@ router.replace(location, onComplete?, onAbort?)
 
 有时候，通过一个名称来标识一个路由显得更方便一些，特别是在链接一个路由，或者是执行一些跳转的时候。你可以在创建 Router 实例的时候，在 routes 配置中给某个路由设置名称。
 
-```
+```js
 const router = new VueRouter({
   routes: [
     {
@@ -304,12 +308,12 @@ const router = new VueRouter({
 ```
 要链接到一个命名路由，可以给 router-link 的 to 属性传一个对象：
 
-```
+```html
 <router-link :to="{ name: 'user', params: { userId: 123 }}">User</router-link>
 ```
 这跟代码调用 router.push() 是一回事：
 
-```
+```html
 router.push({ name: 'user', params: { userId: 123 }})
 ```
 
@@ -322,7 +326,7 @@ router.push({ name: 'user', params: { userId: 123 }})
 ```
 一个视图使用一个组件渲染，因此对于同个路由，多个视图就需要多个组件。确保正确使用 components 配置（带上 s）：
 
-```
+```js
 const router = new VueRouter({
   routes: [
     {
@@ -341,13 +345,14 @@ const router = new VueRouter({
 
 1、全局守卫
 
-```
+```js
 const router = new VueRouter({ ... })
 
 router.beforeEach((to, from, next) => {
   // ...
 })
 ```
+
 每个守卫方法接收三个参数：
 
 to: Route: 即将要进入的目标 路由对象
@@ -368,7 +373,7 @@ next(error): (2.4.0+) 如果传入 next 的参数是一个 Error 实例，则导
 
 你也可以注册全局后置钩子，然而和守卫不同的是，这些钩子不会接受 next 函数也不会改变导航本身
 
-```
+```js
 router.afterEach((to, from) => {
   // ...
 })
@@ -377,7 +382,7 @@ router.afterEach((to, from) => {
 3、路由独享的守卫
 
 在路由配置上直接定义 beforeEnter 守卫
-```
+```js
 const router = new VueRouter({
   routes: [
     {
@@ -395,7 +400,7 @@ const router = new VueRouter({
 
 路由组件内直接定义以下路由导航守卫
 
-```
+```js
 const Foo = {
   template: `...`,
   beforeRouteEnter (to, from, next) {
@@ -417,7 +422,7 @@ const Foo = {
 ```
 注意：beforeRouteEnter 守卫 不能 访问 this，因为守卫在导航确认前被调用,因此即将登场的新组件还没被创建。不过，你可以通过传一个回调给 next来访问组件实例。在导航被确认的时候执行回调，并且把组件实例作为回调方法的参数。
 
-```
+```js
 beforeRouteEnter (to, from, next) {
   next(vm => {
     // 通过 `vm` 访问组件实例
@@ -426,7 +431,7 @@ beforeRouteEnter (to, from, next) {
 ```
 注意：beforeRouteEnter 是支持给 next 传递回调的唯一守卫。对于 beforeRouteUpdate 和 beforeRouteLeave 来说，this 已经可用了，所以不支持传递回调，因为没有必要了。
 
-```
+```js
 beforeRouteUpdate (to, from, next) {
   // just use `this`
   this.name = to.params.name
@@ -435,7 +440,7 @@ beforeRouteUpdate (to, from, next) {
 ```
 用于在用户未进行保存操作之前调用
 
-```
+```js
 beforeRouteLeave (to, from , next) {
   const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
   if (answer) {
@@ -472,7 +477,7 @@ beforeRouteLeave (to, from , next) {
 ##### 对象的解构赋值
 在代码中出现如下写法的时候即是使用了解构赋值的操作，此时的对象属性没有顺序，变量和属性同名。
 
-```
+```js
 let data = {
     name,
     age,
@@ -506,7 +511,7 @@ let data = {
 ES6 提供了更接近传统语言的写法，引入了 Class（类）这个概念，作为对象的模板。通过class关键字，可以定义类。
 基本上，ES6 的class可以看作只是一个语法糖，它的绝大部分功能，ES5 都可以做到，新的class写法只是让对象原型的写法更加清晰、更像面向对象编程的语法而已。
 
-```
+```js
 //定义类
 class Point {
   constructor(x, y) {
@@ -532,7 +537,7 @@ point.toString();
 
 ##### 创建相关的js文件并引入到main.js文件中
 
-```
+```js
 //main.js内部对store.js的配置
 import store from '"@/store/store.js' 
 //具体地址具体路径
@@ -544,7 +549,7 @@ new Vue({
 });
 ```
 
-```
+```js
 // store.js内部的配置内容
 import Vue from 'vue'; //首先引入vue
 import Vuex from 'vuex'; //引入vuex
@@ -573,7 +578,7 @@ export default new Vuex.Store({
 
 ##### 开始使用vuex
 
-```
+```js
 state:{
     goods: {
         totalPrice: 0,
@@ -654,7 +659,7 @@ actions:{
 
 ##### 模板文件写入方式(方式一)
 
-```
+```html
 <template>
     <div id="goods" class="goods-box">
         <ul class="goods-body">
@@ -703,7 +708,7 @@ actions:{
 
 ##### 模板文件写入方式(方式二)
 
-```
+```html
 <!--goods.vue 购物车页面-->
 <template>
     <div id="goods" class="goods-box">
@@ -784,3 +789,5 @@ actions:{
 
 
 #### 七、项目的线上部署
+
+线上部署需要Jenkins的，另外对于前端的线上部署就是使用nginx或者docker部署一个nginx容器指定相应资源路径即可。

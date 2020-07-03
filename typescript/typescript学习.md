@@ -1,4 +1,7 @@
+[TOC]
+
 JavaScript的超集，基于ES6.
+
 #### 1、安装全局的TypeScript
 
 ```powershell

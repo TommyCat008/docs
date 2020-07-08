@@ -181,7 +181,7 @@ function getInfo(str: any):any {
 ```
 
 #### 四、es5中的类
- 
+
 ```javascript
 // 创造一个构造函数以及在其原型链上创建方法
 function Person(name, sex) {
@@ -613,6 +613,77 @@ class Web implements Person {
 #### 九、泛型
 在软件开发中，代码不禁要创建一支的定义良好的API，同时也要考虑可重用性。组件不禁能够支持当前的数据类型，同时也能支持未来的数据类型。这在创建大型系统是为你提供了十分灵活的功能。
 
-在像C#和Java这样的语言中，可以使用泛型来创建可重用的组件，一个组件可以支持多种类型的数据局。这样用户就可以以自己的数据类型来使用组件。
+在像C#和Java这样的语言中，可以使用泛型来创建可重用的组件，一个组件可以支持多种类型的数据。这样用户就可以以自己的数据类型来使用组件。
 
 通俗理解：泛型就是解决类、接口、方法的复用性、以及对不特定数据类型的支持。
+
+##### 简单的泛型使用
+
+```typescript
+function identity <T, U>(value: T, message: U) : T {
+  console.log(message);
+  return value;
+}
+
+console.log(identity(68, "Semlinker"));
+
+```
+
+##### 泛型接口
+
+```typescript
+// 这个里面的类型变量V和M只要有效的字母就可以
+interface Identities<V, M> {
+    num: V,
+    str: M
+}
+
+function identity<T, U>(num: T, str: U): Identities<T, U> {
+    console.log(`num: ${typeof num}`)
+    console.log(`str: ${typeof str}`)
+    let identities: Identities<T, U> = {
+        num,
+        str
+    }
+
+    return identities
+} 
+
+// 在调用过程中，可以切换传参的类型，这样在定义形参的类型的时候就不必写入any
+identity(123, '12312')
+identity('123', 12312)
+```
+
+##### 泛型类
+
+```ts
+interface GenericInterFace<U> {
+    value: U;
+    getVal: () => U
+}
+
+class IdentityClass<T> implements GenericInterFace<T> {
+    value: T;
+
+    constructor(value: T) {
+        this.value = value
+    }
+
+    getVal(): T {
+        return this.value
+    }
+}
+
+// 在实例化的时候，类会根据传递的类型去限制接口内属性的各种类型
+const numberClass = new IdentityClass<Number>(123);
+console.log(typeof numberClass.getVal())
+
+const stringClass = new IdentityClass<string>('123');
+console.log(typeof stringClass.getVal())
+```
+
+##### 泛型约束
+
+###### 确保属性的存在
+
+有时候，我们希望类型变量

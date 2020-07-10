@@ -686,4 +686,98 @@ console.log(typeof stringClass.getVal())
 
 ###### 确保属性的存在
 
-有时候，我们希望类型变量
+有时候，我们希望类型变量对应的类型上存在某些属性的时候，除非显式地将特定属性定义为类型变量，否则编译器不会知道它们的存在。
+
+举例说明：在此种情况下，编译器是不知道T是否含有==length==属性的，因此需要做的事情是让类型变量extends一个含有我们所需属性的接口。
+```ts
+// 错误的写法
+function identity<T>(arg: T): T {
+  console.log(arg.length); // Error
+  return arg;
+}
+```
+
+```ts
+// 正确的写法
+interface Length {
+    length: number;
+}
+
+function identity<T extends Length>(arg: T): T {
+    console.log(arg.length)
+    return arg
+}
+
+// or 设置参数为数组类型
+function identity<T>(arg: T[]): T[] {
+    console.log(arg.length)
+    return arg
+}
+```
+
+###### 检查对象上的键是否存在
+
+1. keyof操作符：keyof 操作符是在 TypeScript 2.1 版本引入的，该操作符可以用于获取某种类型的所有键，其返回类型是联合类型。
+
+eg： 举例说明
+```ts
+interface Person {
+    name: string;
+    age: number;
+    location: string;
+}
+
+type K1 = keyof Person; // "name" | "age" | "location"
+type K2 = keyof Person[];  // number | "length" | "push" | "concat" | ...
+type K3 = keyof { [x: string]: Person };  // string | number
+
+```
+
+eg: 如何使用
+```ts
+enum Difficulty {
+    Easy,
+    Intermediate,
+    Hard
+}
+
+function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
+    return obj[key];
+}
+
+let tsInfo = {
+    name: "Typescript",
+    supersetOf: "Javascript",
+    difficulty: Difficulty.Intermediate
+}
+
+// 这里定义了枚举类型，其值应该是枚举里面的值，否则也会报错的。
+let difficulty: Difficulty = getProperty(tsInfo, 'difficulty'); // OK
+
+/**
+ * 这里会报错，错误信息如下，很显然
+ * Argument of type '"superset_of"' is not assignable to parameter of type '"difficulty" | "name" | "supersetOf"'.
+ **/
+let supersetOf: string = getProperty(tsInfo, 'superset_of'); // Error
+
+```
+###### 泛型参数默认类型
+
+在ts2.3以后支持为泛型中的类型参数指定默认类型，当使用泛型时没有在代码中直接指定类型参数，从实际值参数中也无法推断出类型时，这个默认类型就会起到作用。
+
+```ts
+// 定义接口的时候可以默认指定一个类型
+interface A<T = string> {
+    name: T
+}
+
+const str: A = { name: 'i am string' }
+
+const num: A<number> = { name: 1 }
+```
+
+参考文档：
+
+https://juejin.im/post/5ee00fca51882536846781ee
+
+https://jkchao.github.io/typescript-book-chinese/typings/enums.html#数字类型枚举与数字类型
